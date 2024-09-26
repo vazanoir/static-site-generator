@@ -1,6 +1,12 @@
 import unittest
 
-from html import text_node_to_html_node, TextTypes, split_nodes_delimiter
+from html import (
+    text_node_to_html_node,
+    TextTypes,
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links,
+)
 from textnode import TextNode
 
 
@@ -119,6 +125,32 @@ class TestHTML(unittest.TestCase):
             TextNode("! ", text_types.text),
             TextNode("BOLD!", text_types.code),
             TextNode("spicy and random", text_types.bold)
+        ])
+
+    def test_extract_markdown_images(self):
+        text = (
+            "This is text with a "
+            "![rick roll](https://i.imgur.com/aKaOqIh.gif) and "
+            "![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) and this "
+            "[to youtube](https://www.youtube.com/@bootdotdev) a link"
+        )
+        output = extract_markdown_images(text)
+        self.assertEqual(output, [
+            ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+            ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")
+        ])
+
+    def test_extract_markdown_links(self):
+        text = (
+            "This is text with a link "
+            "[to boot dev](https://www.boot.dev) and "
+            "[to youtube](https://www.youtube.com/@bootdotdev) and this "
+            "![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) an image"
+        )
+        output = extract_markdown_links(text)
+        self.assertEqual(output, [
+            ("to boot dev", "https://www.boot.dev"),
+            ("to youtube", "https://www.youtube.com/@bootdotdev")
         ])
 
 
