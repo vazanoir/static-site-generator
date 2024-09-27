@@ -7,7 +7,8 @@ from html import (
     extract_markdown_images,
     extract_markdown_links,
     split_nodes_image,
-    split_nodes_link
+    split_nodes_link,
+    text_to_text_nodes
 )
 from textnode import TextNode
 
@@ -247,6 +248,30 @@ class TestHTML(unittest.TestCase):
                 "![image](https://boot.dev/img.png)",
                 text_types.text
             ),
+        ])
+
+    def test_text_to_text_nodes(self):
+        text_types = TextTypes()
+
+        text = (
+            "This is **text** with an *italic* word and a "
+            "`code block` and an "
+            "![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a "
+            "[link](https://boot.dev)"
+        )
+
+        output = text_to_text_nodes(text)
+        self.assertEqual(output, [
+            TextNode("This is ", text_types.text),
+            TextNode("text", text_types.bold),
+            TextNode(" with an ", text_types.text),
+            TextNode("italic", text_types.italic),
+            TextNode(" word and a ", text_types.text),
+            TextNode("code block", text_types.code),
+            TextNode(" and an ", text_types.text),
+            TextNode("obi wan image", text_types.image, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", text_types.text),
+            TextNode("link", text_types.link, "https://boot.dev"),
         ])
 
 

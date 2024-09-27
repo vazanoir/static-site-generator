@@ -140,3 +140,14 @@ def split_nodes_link(old_nodes):
             previous = before + f"[{link[0]}]({link[1]})"
 
     return new_nodes
+
+
+def text_to_text_nodes(text):
+    text_types = TextTypes()
+    nodes = [TextNode(text, text_types.text)]
+    nodes = split_nodes_delimiter(nodes, "**", text_types.bold)
+    nodes = split_nodes_delimiter(nodes, "*", text_types.italic)
+    nodes = split_nodes_delimiter(nodes, "`", text_types.code)
+    nodes = split_nodes_link(nodes)
+    nodes = split_nodes_image(nodes)
+    return nodes
