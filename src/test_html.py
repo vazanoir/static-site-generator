@@ -159,21 +159,21 @@ class TestHTML(unittest.TestCase):
         text_types = TextTypes()
         nodes = [
             TextNode(
-                'some really *spicy* and random [link]("https://boot.dev")',
+                "some really *spicy* and random [link](https://boot.dev)",
                 text_types.text
             ),
             TextNode(
                 (
-                    'some really *spicy* and random '
-                    '![image]("https://boot.dev/img.png")'
+                    "some really *spicy* and random "
+                    "![image](https://boot.dev/img.png)"
                 ),
                 text_types.text
             ),
             TextNode(
                 (
-                    'some really *spicy* and random '
-                    '![fox]("https://boot.dev/fox.png") and this '
-                    '![chicken]("https://boot.dev/chicken.png")'
+                    "some really *spicy* and random "
+                    "![fox](https://boot.dev/fox.png) and this "
+                    "![chicken](https://boot.dev/chicken.png)"
                 ),
                 text_types.text
             ),
@@ -182,43 +182,47 @@ class TestHTML(unittest.TestCase):
         output = split_nodes_image(nodes)
         self.assertEqual(output, [
             TextNode(
-                'some really *spicy* and random [link]("https://boot.dev")',
+                "some really *spicy* and random [link](https://boot.dev)",
                 text_types.text
             ),
             TextNode(
-                'some really *spicy* and random ',
+                "some really *spicy* and random ",
                 text_types.text
             ),
             TextNode("image", text_types.image, "https://boot.dev/img.png"),
             TextNode(
-                'some really *spicy* and random ',
+                "some really *spicy* and random ",
                 text_types.text
             ),
             TextNode("fox", text_types.image, "https://boot.dev/fox.png"),
             TextNode(
-                ' and this ',
+                " and this ",
                 text_types.text
             ),
-            TextNode("chicken", text_types.image, "https://boot.dev/chicken.png"),
+            TextNode(
+                "chicken",
+                text_types.image,
+                "https://boot.dev/chicken.png"
+            ),
         ])
 
     def test_split_nodes_link(self):
         text_types = TextTypes()
         nodes = [
             TextNode(
-                'some really *spicy* and random [link]("https://boot.dev")',
+                "some really *spicy* and random [link](https://boot.dev)",
                 text_types.text
             ),
             TextNode(
-                'some really *spicy* and random '
-                '[link]("https://shoe.dev") and '
-                '[LINK]("https://shutdown.dev")',
+                "some really *spicy* and random "
+                "[link](https://shoe.dev) and "
+                "[LINK](https://shutdown.dev)",
                 text_types.text
             ),
             TextNode(
                 (
-                    'some really *spicy* and random '
-                    '![image]("https://boot.dev/img.png")'
+                    "some really *spicy* and random "
+                    "![image](https://boot.dev/img.png)"
                 ),
                 text_types.text
             ),
@@ -227,20 +231,20 @@ class TestHTML(unittest.TestCase):
         output = split_nodes_link(nodes)
         self.assertEqual(output, [
             TextNode(
-                'some really *spicy* and random ',
+                "some really *spicy* and random ",
                 text_types.text
             ),
-            TextNode("link", text_types.link, 'https://boot.dev'),
+            TextNode("link", text_types.link, "https://boot.dev"),
             TextNode(
-                'some really *spicy* and random ',
+                "some really *spicy* and random ",
                 text_types.text
             ),
-            TextNode("link", text_types.link, 'https://shoe.dev'),
+            TextNode("link", text_types.link, "https://shoe.dev"),
             TextNode(" and ", text_types.text),
-            TextNode("LINK", text_types.link, 'https://shutdown.dev'),
+            TextNode("LINK", text_types.link, "https://shutdown.dev"),
             TextNode(
-                'some really *spicy* and random '
-                '![image]("https://boot.dev/img.png")',
+                "some really *spicy* and random "
+                "![image](https://boot.dev/img.png)",
                 text_types.text
             ),
         ])
