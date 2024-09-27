@@ -8,7 +8,8 @@ from html import (
     extract_markdown_links,
     split_nodes_image,
     split_nodes_link,
-    text_to_text_nodes
+    text_to_text_nodes,
+    markdown_to_blocks,
 )
 from textnode import TextNode
 
@@ -269,10 +270,39 @@ class TestHTML(unittest.TestCase):
             TextNode(" word and a ", text_types.text),
             TextNode("code block", text_types.code),
             TextNode(" and an ", text_types.text),
-            TextNode("obi wan image", text_types.image, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(
+                "obi wan image",
+                text_types.image,
+                "https://i.imgur.com/fJRm4Vk.jpeg"
+            ),
             TextNode(" and a ", text_types.text),
             TextNode("link", text_types.link, "https://boot.dev"),
         ])
+
+    def test_markdown_to_blocks(self):
+        md = (
+                "# This is a heading\n\n"
+                "This is a paragraph of text. "
+                "It has some **bold** and *italic* words inside of it.\n\n"
+                "* This is the first list item in a list block\n"
+                "* This is a list item\n"
+                "* This is another list item"
+        )
+
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(blocks, [
+            "# This is a heading",
+            (
+                "This is a paragraph of text. "
+                "It has some **bold** and *italic* words inside of it."
+            ),
+            (
+                "* This is the first list item in a list block\n"
+                "* This is a list item\n"
+                "* This is another list item"
+            )
+        ])
+        pass
 
 
 if __name__ == "__main__":
