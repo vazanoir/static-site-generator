@@ -13,3 +13,16 @@ class TextNode:
 
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
+
+
+class TextTypes():
+    def __init__(self):
+        self.text = "text"
+        self.bold = "bold"
+        self.italic = "italic"
+        self.code = "code"
+        self.link = "link"
+        self.image = "image"
+
+    def is_valid_type(self, type_to_test):
+        return type_to_test in self.__dict__
