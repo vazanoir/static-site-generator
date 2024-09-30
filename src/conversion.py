@@ -1,10 +1,17 @@
 from leafnode import LeafNode
+from parentnode import ParentNode
 from textnode import TextNode, TextTypes
 from nodesplit import (
     split_nodes_link,
     split_nodes_image,
     split_nodes_delimiter,
 )
+import block as b
+
+
+def markdown_to_blocks(text):
+    blocks = text.split("\n\n")
+    return list(map(lambda block: block.strip(), blocks))
 
 
 def text_node_to_html_node(text_node):
@@ -42,3 +49,12 @@ def text_to_text_nodes(text):
     nodes = split_nodes_link(nodes)
     nodes = split_nodes_image(nodes)
     return nodes
+
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    output = []
+    for block in blocks:
+        output.append(b.BlockTypes().to_html(block))
+
+    return ParentNode(output, "div")
