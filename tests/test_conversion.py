@@ -6,7 +6,8 @@ from conversion import (
     markdown_to_blocks,
     markdown_to_html_node,
 )
-from textnode import TextNode, TextTypes
+from textnode import TextNode
+from md_types import TextTypes
 
 
 class TestHTML(unittest.TestCase):

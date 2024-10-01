@@ -1,4 +1,5 @@
-from textnode import TextNode, TextTypes
+from textnode import TextNode
+from md_types import TextTypes
 import re
 
 

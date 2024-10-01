@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextTypes
+from textnode import TextNode
 from nodesplit import (
     split_nodes_delimiter,
     split_nodes_link,
@@ -8,6 +8,7 @@ from nodesplit import (
     extract_markdown_links,
     extract_markdown_images,
 )
+from md_types import TextTypes
 
 
 class TestNodeSplit(unittest.TestCase):

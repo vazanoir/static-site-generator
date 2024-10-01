@@ -1,12 +1,19 @@
 from leafnode import LeafNode
 from parentnode import ParentNode
-from textnode import TextNode, TextTypes
+from textnode import TextNode
 from nodesplit import (
     split_nodes_link,
     split_nodes_image,
     split_nodes_delimiter,
 )
-import block as b
+from block import (
+    block_to_block_type,
+    get_heading_length,
+)
+from md_types import (
+    TextTypes,
+    BlockTypes
+)
 
 
 def markdown_to_blocks(text):
@@ -51,10 +58,61 @@ def text_to_text_nodes(text):
     return nodes
 
 
+def block_to_html(block):
+    block_type = block_to_block_type(block)
+    block_types = BlockTypes()
+
+    if block_type == block_types.heading:
+        heading_length = get_heading_length(block)
+
+        children = []
+        for node in text_to_text_nodes(block[heading_length + 1:]):
+            children.append(text_node_to_html_node(node))
+
+        return ParentNode(
+            children,
+            f"h{heading_length}",
+        )
+
+    if block_type == block_types.code:
+        return ParentNode([LeafNode(block[3:-3].strip(), "code")], "pre")
+    if block_type == block_types.quote:
+        new_block = ""
+        for line in block.split("\n"):
+            new_block += line[2:] + "\n"
+
+        children = []
+        for node in text_to_text_nodes(new_block.strip()):
+            children.append(text_node_to_html_node(node))
+        return ParentNode(children, "quote")
+    if block_type == block_types.unordered_list:
+        children = []
+        for line in block.split("\n"):
+            inner_children = []
+            for node in text_to_text_nodes(line[2:]):
+                inner_children.append(text_node_to_html_node(node))
+            children.append(ParentNode(inner_children, "li"))
+        return ParentNode(children, "ul")
+    if block_type == block_types.ordered_list:
+        children = []
+        for line in block.split("\n"):
+            inner_children = []
+            for node in text_to_text_nodes(line[3:]):
+                inner_children.append(text_node_to_html_node(node))
+            children.append(ParentNode(inner_children, "li"))
+        return ParentNode(children, "ol")
+
+    children = []
+    for node in text_to_text_nodes(block):
+        children.append(text_node_to_html_node(node))
+
+    return ParentNode(children, "p")
+
+
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     output = []
     for block in blocks:
-        output.append(b.BlockTypes().to_html(block))
+        output.append(block_to_html(block))
 
     return ParentNode(output, "div")

@@ -1,6 +1,7 @@
 import unittest
 
-from block import BlockTypes, block_to_block_type
+from block import block_to_block_type
+from md_types import BlockTypes
 
 
 class TestBlock(unittest.TestCase):
