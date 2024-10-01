@@ -1,12 +1,12 @@
 import unittest
 
-from src.conversion import (
+from conversion import (
     text_node_to_html_node,
     text_to_text_nodes,
     markdown_to_blocks,
     markdown_to_html_node,
 )
-from src.textnode import TextNode, TextTypes
+from textnode import TextNode, TextTypes
 
 
 class TestHTML(unittest.TestCase):

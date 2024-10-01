@@ -1,7 +1,7 @@
 import unittest
 
-from src.textnode import TextNode, TextTypes
-from src.nodesplit import (
+from textnode import TextNode, TextTypes
+from nodesplit import (
     split_nodes_delimiter,
     split_nodes_link,
     split_nodes_image,
