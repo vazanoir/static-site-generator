@@ -80,7 +80,7 @@ class BlockTypes():
                 f"h{self.__heading_length}",
             )
         if self.__is_code():
-            return ParentNode(LeafNode(block[3:-3].strip(), "code"), "pre")
+            return ParentNode([LeafNode(block[3:-3].strip(), "code")], "pre")
         if self.__is_quote():
             new_block = ""
             for line in block.split("\n"):
