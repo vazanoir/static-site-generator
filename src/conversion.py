@@ -62,51 +62,52 @@ def block_to_html(block):
     block_type = block_to_block_type(block)
     block_types = BlockTypes()
 
-    if block_type == block_types.heading:
-        heading_length = get_heading_length(block)
+    match block_type:
+        case block_types.heading:
+            heading_length = get_heading_length(block)
 
-        children = []
-        for node in text_to_text_nodes(block[heading_length + 1:]):
-            children.append(text_node_to_html_node(node))
+            children = []
+            for node in text_to_text_nodes(block[heading_length + 1:]):
+                children.append(text_node_to_html_node(node))
+            return ParentNode(children, f"h{heading_length}")
 
-        return ParentNode(
-            children,
-            f"h{heading_length}",
-        )
+        case block_types.code:
+            return ParentNode([LeafNode(block[3:-3].strip(), "code")], "pre")
 
-    if block_type == block_types.code:
-        return ParentNode([LeafNode(block[3:-3].strip(), "code")], "pre")
-    if block_type == block_types.quote:
-        new_block = ""
-        for line in block.split("\n"):
-            new_block += line[2:] + "\n"
+        case block_types.quote:
+            new_block = ""
+            for line in block.split("\n"):
+                new_block += line[2:] + "\n"
 
-        children = []
-        for node in text_to_text_nodes(new_block.strip()):
-            children.append(text_node_to_html_node(node))
-        return ParentNode(children, "quote")
-    if block_type == block_types.unordered_list:
-        children = []
-        for line in block.split("\n"):
-            inner_children = []
-            for node in text_to_text_nodes(line[2:]):
-                inner_children.append(text_node_to_html_node(node))
-            children.append(ParentNode(inner_children, "li"))
-        return ParentNode(children, "ul")
-    if block_type == block_types.ordered_list:
-        children = []
-        for line in block.split("\n"):
-            inner_children = []
-            for node in text_to_text_nodes(line[3:]):
-                inner_children.append(text_node_to_html_node(node))
-            children.append(ParentNode(inner_children, "li"))
-        return ParentNode(children, "ol")
+            children = []
+            for node in text_to_text_nodes(new_block.strip()):
+                children.append(text_node_to_html_node(node))
+            return ParentNode(children, "quote")
 
-    children = []
-    for node in text_to_text_nodes(block):
-        children.append(text_node_to_html_node(node))
+        case block_types.unordered_list:
+            children = []
+            for line in block.split("\n"):
+                inner_children = []
+                for node in text_to_text_nodes(line[2:]):
+                    inner_children.append(text_node_to_html_node(node))
+                children.append(ParentNode(inner_children, "li"))
+            return ParentNode(children, "ul")
 
-    return ParentNode(children, "p")
+        case block_types.ordered_list:
+            children = []
+            for line in block.split("\n"):
+                inner_children = []
+                for node in text_to_text_nodes(line[3:]):
+                    inner_children.append(text_node_to_html_node(node))
+                children.append(ParentNode(inner_children, "li"))
+            return ParentNode(children, "ol")
+
+        case _:
+            children = []
+            for node in text_to_text_nodes(block):
+                children.append(text_node_to_html_node(node))
+
+            return ParentNode(children, "p")
 
 
 def markdown_to_html_node(markdown):
