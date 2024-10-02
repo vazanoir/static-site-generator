@@ -1,12 +1,12 @@
 from shutil import rmtree, copy
 from os import mkdir, listdir, path
-from pagegen import generate_page
+from pagegen import generate_pages_recursive
 
 
 def main():
     remove_dir_content("public")
     copy_tree("static", "public")
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 
 def copy_tree(source, destination):

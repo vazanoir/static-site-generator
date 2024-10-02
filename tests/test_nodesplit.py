@@ -121,6 +121,14 @@ class TestNodeSplit(unittest.TestCase):
             ("to youtube", "https://www.youtube.com/@bootdotdev")
         ])
 
+        text = (
+            "[back home](/)"
+        )
+        output = extract_markdown_links(text)
+        self.assertEqual(output, [
+            ("back home", "/"),
+        ])
+
     def test_split_nodes_image(self):
         text_types = TextTypes()
         nodes = [

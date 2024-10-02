@@ -1,6 +1,6 @@
 import re
 from conversion import markdown_to_html_node
-from os import makedirs, path
+from os import makedirs, path, mkdir, listdir
 
 
 def extract_title(markdown):
@@ -34,3 +34,21 @@ def generate_page(source_path, template_path, dest_path):
 
     dest_file = open(dest_path, mode='w')
     dest_file.write(template_buffer)
+
+
+def generate_pages_recursive(source_path, template_path, dest_path):
+    ls = listdir(source_path)
+
+    for item in ls:
+        source_item = path.join(source_path, item)
+        dest_item = path.join(dest_path, item)
+
+        if path.isfile(source_item):
+            generate_page(
+                source_item,
+                template_path,
+                dest_item.replace("md", "html")
+            )
+        else:
+            mkdir(dest_item)
+            generate_pages_recursive(source_item, template_path, dest_item)
