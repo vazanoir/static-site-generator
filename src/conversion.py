@@ -82,7 +82,7 @@ def block_to_html(block):
             children = []
             for node in text_to_text_nodes(new_block.strip()):
                 children.append(text_node_to_html_node(node))
-            return ParentNode(children, "quote")
+            return ParentNode(children, "blockquote")
 
         case block_types.unordered_list:
             children = []
