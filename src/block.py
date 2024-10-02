@@ -65,8 +65,8 @@ def block_to_block_type(block):
 def get_heading_length(block):
     heading_length = 1
 
-    for char in block:
-        i = block.index(char)
+    for i in range(len(block)):
+        char = block[i]
         if char == "#" and block[i - 1] == "#":
             heading_length += 1
 
