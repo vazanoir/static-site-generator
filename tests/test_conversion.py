@@ -127,7 +127,6 @@ Pour intégrer cette recette sur votre site web, vous pouvez copier-coller le co
 ```html
 <iframe href="https://crepes.com/recette?embed"></iframe>
 ```""")
-        print(output.to_html())
 
 
 if __name__ == "__main__":
